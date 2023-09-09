@@ -11,4 +11,4 @@ sudo apt-get install -y i2c-tools
 sudo pip3 install adafruit-circuitpython-ssd1306
 sudo apt-get install python3-pil
 
-sudo sed '$ i\sudo python3 /app/index.py &' /etc/rc.local
+sudo sed -i '$ i\sudo python3 /app/index.py &' /etc/rc.local

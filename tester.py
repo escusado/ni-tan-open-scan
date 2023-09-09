@@ -6,24 +6,14 @@
 # Adafruit Blinka to support CircuitPython libraries. CircuitPython does
 # not support PIL/pillow (python imaging library)!
 
-import time
-from board import SCL, SDA
-import busio
 from PIL import Image, ImageDraw, ImageFont
-import adafruit_ssd1306
 from menu import Menu
-from encoder import Encoder
 
-
-i2c = busio.I2C(SCL, SDA)
-disp = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c)
 font = ImageFont.load_default()
 
 # Clear display.
-disp.fill(0)
-disp.show()
-width = disp.width
-height = disp.height
+width = 128
+height = 32
 image = Image.new("1", (width, height))
 draw = ImageDraw.Draw(image)
 draw.rectangle((0, 0, width, height), outline=0, fill=0)
@@ -49,15 +39,10 @@ menu = Menu([
             {"label": "999"},
             ])
 
-encoder = Encoder()
+# Draw a black filled box to clear the image.
+draw.rectangle((0, 0, width, height), outline=0, fill=0)
 
-while True:
-    # Draw a black filled box to clear the image.
-    draw.rectangle((0, 0, width, height), outline=0, fill=0)
-    print(encoder.getEncoderPosition())
-    print(encoder.isEncoderPressed())
-    image.paste(menu.getMenuAt(0), (0, 0))
+# render menu using menu.getMenuAt and draw it on the image
+image.paste(menu.getMenuAt(0), (0, 0))
 
-    disp.image(image)
-    disp.show()
-    time.sleep(0.1)
+image.show()
