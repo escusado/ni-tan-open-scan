@@ -6,14 +6,19 @@
 # Adafruit Blinka to support CircuitPython libraries. CircuitPython does
 # not support PIL/pillow (python imaging library)!
 
+from stepper_test_screen import StepperTestScreen
+from menu_screen import MenuScreen
 import time
 from board import SCL, SDA
 import busio
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_ssd1306
-from menu import Menu
-from encoder import Encoder
 
+from encoder import Encoder
+encoder = Encoder()
+
+xAxisScreen = StepperTestScreen('X')
+yAxisScreen = StepperTestScreen('Y')
 
 i2c = busio.I2C(SCL, SDA)
 disp = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c)
@@ -37,26 +42,39 @@ top = padding
 x = 0
 
 # example python nested map objects
-menu = Menu([
-            {"label": "home"},
-            {"label": "test x"},
-            {"label": "test y"},
-            {"label": "test cam"},
-            {"label": "settings"},
-            {"label": "666"},
-            {"label": "777"},
-            {"label": "888"},
-            {"label": "999"},
-            ])
+mainMenuScreen = MenuScreen([
+    {"label": "home"},
+    {"label": "test x"},
+    {"label": "test y"},
+    {"label": "test cam"},
+    {"label": "settings"},
+    {"label": "666"},
+    {"label": "777"},
+    {"label": "888"},
+    {"label": "999"},
+])
 
-encoder = Encoder()
+screens = {
+    "home": mainMenuScreen,
+    "test x": xAxisScreen,
+    "test y": yAxisScreen,
+}
+currentScreen = 'home'
+
 
 while True:
     # Draw a black filled box to clear the image.
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
-    print(encoder.getEncoderPosition())
-    print(encoder.isEncoderPressed())
-    image.paste(menu.getMenuAt(0), (0, 0))
+
+    screens[currentScreen].updateRotaryPosition(encoder.getEncoderDelta())
+    screenToNavigate = screens[currentScreen].handleSwitchPressAndNavigate(
+        encoder.isEncoderPressed())
+
+    # if scren in screens, set it to current
+    if screenToNavigate in screens:
+        currentScreen = screenToNavigate
+
+    image.paste(screens[currentScreen].getScreen())
 
     disp.image(image)
     disp.show()

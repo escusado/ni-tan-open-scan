@@ -20,27 +20,33 @@ switch = digitalio.DigitalIO(seesaw, 24)
 pixel = neopixel.NeoPixel(seesaw, 6, 1)
 pixel.brightness = 0.5
 
-last_position = -1
-color = 0  # start at red
-
 
 class Encoder:
-    def getEncoderPosition():
+    def __init__(self):
+        self.last_position = -1
+        self.color = 0  # start at red
+        self.changeDelta = 0
+
+    def getEncoderPosition(self):
         position = -encoder.position
 
-        if position != last_position:
-            print(position)
-
+        if position != self.last_position:
             # Change the LED color.
-            if position > last_position:  # Advance forward through the colorwheel.
-                color += 10
+            if position > self.last_position:  # Advance forward through the colorwheel.
+                self.color += 10
             else:
-                color -= 10  # Advance backward through the colorwheel.
-            color = (color + 256) % 256  # wrap around to 0-256
-            pixel.fill(colorwheel(color))
+                self.color -= 10  # Advance backward through the colorwheel.
+            self.color = (self.color + 256) % 256  # wrap around to 0-256
+            pixel.fill(colorwheel(self.color))
 
-        last_position = position
+        self.changeDelta = self.last_position - position
+
+        self.last_position = position
         return position
 
-    def isEncoderPressed():
-        return switch.value
+    def getEncoderDelta(self):
+        self.getEncoderPosition()
+        return self.changeDelta
+
+    def isEncoderPressed(self):
+        return switch.value == False
