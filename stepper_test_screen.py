@@ -3,16 +3,17 @@ font = ImageFont.load_default()
 
 
 class StepperTestScreen:
-    def __init__(self, axis):
+    def __init__(self, axis, steps):
         # Menu screen size
         self.screenWidth = 128
         self.screenHeight = 32
 
         self.axis = axis
-        self.rotaryDelta = 0
+        self.steps = steps
+        self.encoderRotation = 0
 
     def updateRotaryPosition(self, delta):
-        self.rotaryDelta += delta
+        self.encoderRotation += delta
 
     def handleSwitchPressAndNavigate(self, isEncoderPressed):
         if isEncoderPressed:
@@ -25,6 +26,6 @@ class StepperTestScreen:
             (0, 0, self.screenWidth, self.screenHeight), outline=0, fill=0)
 
         draw.text((0, 0), self.axis+': ' +
-                  str(self.rotaryDelta), font=font, fill=255)
+                  str(self.encoderRotation), font=font, fill=255)
 
         return image

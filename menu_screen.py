@@ -34,7 +34,6 @@ class MenuScreen:
         return self.getMenuSelectionAt(self.currentMenuRotaryPosition)
 
     def handleSwitchPressAndNavigate(self, isEncoderPressed):
-        print('MenuScreen handleSwitchPress')
         if isEncoderPressed:
             return self.menu[self.currentSelectedRow]['label']
 
