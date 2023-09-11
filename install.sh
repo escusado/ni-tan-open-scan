@@ -10,5 +10,10 @@ sudo apt-get install python3-smbus
 sudo apt-get install -y i2c-tools
 sudo pip3 install adafruit-circuitpython-ssd1306
 sudo apt-get install python3-pil
+sudo chmod +x /app/start_app.sh
 
-sudo sed -i '$ i\sudo python3 /app/index.py &' /etc/rc.local
+# app and webserver on boot
+sudo sed -i '$ i\sudo /app/start_app.sh &' /etc/rc.local
+
+# open Chrome app on ui start
+sudo sed -i '$a\@xset s off\n@xset -dpms\n@xset s noblank\n@chromium-browser http://localhost:8000/' /etc/xdg/lxsession/LXDE-pi/autostart

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanner</title>
+    <!--include tailwind-->
+    <link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="bg-red-200">
+        👁️ Sup this is the scanner yo!
+    </div>
+    <div>
+        <img src="camera-preview.png" alt="">
+    </div>
+    <div>
+        <pre class="data-container">
+            fetchin...
+        </pre>
+    </div>
+</body>
+
+<script>
+    //refresh every second
+    setInterval(function () {
+        window.location.reload(1);
+    }, 1000);
+    //fetch data.json an display it
+    fetch('data.json')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            document.querySelector('.data-container').innerHTML = JSON.stringify(data, null, 2);
+        });
+</script>
+
+</html>

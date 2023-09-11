@@ -13,15 +13,11 @@ class MenuScreen:
         self.screenHeight = 32
 
         # Menu state
-        self.rowsToShow = 4
-        self.currentPath = []
+        self.menu = menu
         self.currentSelectedRow = 0
         self.currentMenuRotaryPosition = 0
         self.menuHeight = ((rowHeight*(len(menu))) +
                            (verticalPadding*2)+1) - (rowHeight*2)
-        self.menu = menu
-
-        print('Menu created')
 
     def updateRotaryPosition(self, delta):
         self.currentMenuRotaryPosition += delta
