@@ -7,7 +7,7 @@ import busio
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_ssd1306
 
-from encoder import Encoder
+from encoder_driver import Encoder
 encoder = Encoder()
 
 xAxisScreen = StepperTestScreen('X', 400)
